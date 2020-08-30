@@ -1,26 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import ToDoList from './components/ToDoList';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App=() =>{
+
+  const [inputList, setInputList]=useState("");
+  const [Items,setItems]=useState([]);
+
+  const itemEvent=(e)=>{
+    e.preventDefault();
+    setInputList(e.target.value);
+  }
+
+  const listOfItems=()=>{
+    setItems((oldItems)=>{
+      return [...oldItems,inputList];
+    })
+    setInputList('')
+  }
+
+  const deleteItems=(id)=>{
+    setItems((oldItems)=>{
+      return oldItems.filter((arrElem,index)=>{
+        return index !==id
+      });
+    });
 }
 
-export default App;
+const editItems=(e)=>{
+return e.target.value
+
+}
+
+  return (
+    <>
+    <div className="main_div">
+      <div className="center_div">
+        <br/>
+        <h1>ToDo List</h1>
+        <br/>
+        <input type="text" placeholder="Add a Items" 
+        value={inputList}
+        onChange={itemEvent}/>
+        <button onClick={listOfItems}>Add</button>
+        <ol>
+          {/*<li>{inputList}</li>*/}
+          {Items.map((itemval,index)=>{
+            return <ToDoList key={index} id={index} text={itemval} onSelect={deleteItems} edit={editItems}/>;
+          })}
+        </ol>
+      </div>
+    </div>
+    </>
+  )
+}
+
+export default App
+
